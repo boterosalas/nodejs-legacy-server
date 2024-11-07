@@ -35,6 +35,7 @@ class Server {
     }
 
     routes() {
+        this.app.use('/api/auth', require('../routes/auth.js'));
         this.app.use('/api/users', require('../routes/user.js'));
     }
 
