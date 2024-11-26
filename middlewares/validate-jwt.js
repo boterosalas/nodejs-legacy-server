@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 const validateJWT = async (req, res, next) => {
@@ -10,22 +10,22 @@ const validateJWT = async (req, res, next) => {
     });
   }
   try {
-      const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
-      const user = await User.findById(uid);
-      if (!user) {
-          return res.status(401).json({
-              msg: "Invalid token - user does not exist",
-          });
-      }
-      if (!user.status) {
-          return res.status(401).json({
-              msg: "Invalid token - user is inactive",
-          });
-      }
-      req.user = user.toJSON();
-      next();
+    const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
+    const user = await User.findById(uid);
+    if (!user) {
+      return res.status(401).json({
+        msg: "Invalid token - user does not exist",
+      });
+    }
+    if (!user.status) {
+      return res.status(401).json({
+        msg: "Invalid token - user is inactive",
+      });
+    }
+    req.user = user.toJSON();
+    next();
   } catch (error) {
-    console.log(error);
+    console.log("validateJWT", error);
     return res.status(401).json({
       msg: "Invalid token",
     });

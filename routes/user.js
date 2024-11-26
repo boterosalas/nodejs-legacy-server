@@ -40,4 +40,3 @@ router.delete('/:id', [
 ], usersDelete);
 
 module.exports = router;
-// module.exports = router
