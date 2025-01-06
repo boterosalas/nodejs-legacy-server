@@ -7,8 +7,12 @@ const {
   createProduct,
   updateProduct,
   deleteProduct,
+  showImage
 } = require("../controllers/products");
-const { categoryExistsById, productExistsById } = require("../helpers/db-validators");
+const {
+  categoryExistsById,
+  productExistsById,
+} = require("../helpers/db-validators");
 
 const router = Router();
 
@@ -59,6 +63,16 @@ router.delete(
     validateFields,
   ],
   deleteProduct
+);
+
+router.get(
+  "/image/:id",
+  [
+    check("id", "Invalid ID").isMongoId(),
+    check("id").custom(productExistsById),
+    validateFields,
+  ],
+  showImage
 );
 
 module.exports = router;

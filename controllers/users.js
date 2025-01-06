@@ -1,6 +1,11 @@
 const { response } = require("express");
 const User = require("../models/user");
 const bcryptjs = require("bcryptjs");
+const path = require("path");
+const fs = require("fs");
+
+const usersPath = "users";
+const defaultImage = path.join(__dirname, "../assets", "no-image.jpg");
 
 const usersGet = async (req, res = response) => {
   const { from = 0, limit = 5 } = req.query;
@@ -56,10 +61,29 @@ const usersPatch = (req, res = response) => {
   });
 };
 
+const showImage = async (req, res = response) => {
+  const { id } = req.params;
+  const userDB = await User.findById(id);
+  if (userDB.image) {
+    const pathCurrentImage = path.join(
+      __dirname,
+      "../uploads",
+      productsPath,
+      userDB.image
+    );
+    if (fs.existsSync(pathCurrentImage)) {
+      console.log(pathCurrentImage);
+      return res.status(200).sendFile(pathCurrentImage);
+    }
+  }
+  return res.status(200).sendFile(defaultImage);
+};
+
 module.exports = {
   usersGet,
   usersPut,
   usersPost,
   usersDelete,
   usersPatch,
+  showImage,
 };

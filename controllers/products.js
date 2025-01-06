@@ -5,6 +5,10 @@ const { googleVerify } = require("../helpers/google-verify");
 const role = require("../models/role");
 const Category = require("../models/category");
 const Product = require("../models/product");
+const path = require("path");
+const fs = require("fs");
+const productsPath = "products";
+const defaultImage = path.join(__dirname, "../assets", "no-image.jpg");
 
 const getProducts = async (req, res = response) => {
   const { from = 0, limit = 5 } = req.query;
@@ -86,10 +90,29 @@ const deleteProduct = async (req, res = response) => {
   });
 };
 
+const showImage = async (req, res = response) => {
+  const { id } = req.params;
+  const productDB = await Product.findById(id);
+  if (productDB.image) {
+    const pathCurrentImage = path.join(
+      __dirname,
+      "../uploads",
+      productsPath,
+      productDB.image
+    );
+    if (fs.existsSync(pathCurrentImage)) {
+      console.log(pathCurrentImage);
+      return res.status(200).sendFile(pathCurrentImage);
+    }
+  }
+  return res.status(200).sendFile(defaultImage);
+};
+
 module.exports = {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
+  showImage,
 };
