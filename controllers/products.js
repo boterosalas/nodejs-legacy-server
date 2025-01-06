@@ -108,6 +108,15 @@ const showImage = async (req, res = response) => {
   return res.status(200).sendFile(defaultImage);
 };
 
+const showImageCloudinary = async (req, res = response) => {
+  const { id } = req.params;
+  const productDB = await Product.findById(id);
+  if (productDB.image) {
+    return res.status(200).redirect(productDB.image);
+  }
+  return res.status(200).sendFile(defaultImage);
+};
+
 module.exports = {
   getProducts,
   getProductById,
@@ -115,4 +124,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   showImage,
+  showImageCloudinary,
 };

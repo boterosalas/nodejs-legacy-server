@@ -7,7 +7,8 @@ const {
   createProduct,
   updateProduct,
   deleteProduct,
-  showImage
+  showImage,
+  showImageCloudinary
 } = require("../controllers/products");
 const {
   categoryExistsById,
@@ -72,7 +73,8 @@ router.get(
     check("id").custom(productExistsById),
     validateFields,
   ],
-  showImage
+  showImageCloudinary
+  // showImage
 );
 
 module.exports = router;
